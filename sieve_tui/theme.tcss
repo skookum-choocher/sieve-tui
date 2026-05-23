@@ -1,87 +1,92 @@
 /* Noctus v2 palette applied to Textual primitives.
-   Base stone grays with amber + acid green accents. */
+   Base stone grays with amber + acid green accents.
 
-$background: #1D1D1D;
-$surface: #3E3E3E;
-$panel: #5C5C5C;
-$foreground: #A5A5A5;
-$text: #A5A5A5;
-$primary: #E0A810;      /* hot amber — accent / focus */
-$secondary: #7A8C15;    /* acid green — active mode */
-$accent: #D4A54E;       /* burnished gold — titles */
-$success: #3A8A3A;      /* forest green */
-$warning: #E0A810;      /* hot amber */
-$error: #C75A43;        /* terra cotta */
+   IMPORTANT: We use *namespaced* variables ($noctus-*) so we don't collide
+   with Textual's reserved CSS variables ($panel, $surface, etc.) which
+   the framework uses in its own internal stylesheet in ways that break
+   when overridden as plain colors (e.g. their `hatch: right $panel;` rule
+   requires $panel to carry shape info we can't supply via CSS). */
+
+$noctus-bg:        #1D1D1D;   /* near black — main background */
+$noctus-surface:   #3E3E3E;   /* charcoal — secondary bg, inputs */
+$noctus-panel:     #5C5C5C;   /* dark gray — borders, dim */
+$noctus-fg:        #A5A5A5;   /* light gray — default text */
+$noctus-fg-bright: #F5F5F5;   /* near white — emphasis */
+$noctus-amber:     #E0A810;   /* hot amber — focus, accent */
+$noctus-gold:      #D4A54E;   /* burnished gold — titles */
+$noctus-acid:      #7A8C15;   /* acid green — active mode */
+$noctus-green:     #3A8A3A;   /* forest green — success */
+$noctus-terra:     #C75A43;   /* terra cotta — error */
 
 Screen {
-    background: $background;
-    color: $foreground;
+    background: $noctus-bg;
+    color: $noctus-fg;
 }
 
 Header {
-    background: $surface;
-    color: $accent;
+    background: $noctus-surface;
+    color: $noctus-gold;
 }
 
 Footer {
-    background: $surface;
-    color: $foreground;
+    background: $noctus-surface;
+    color: $noctus-fg;
 }
 
 .title {
-    color: $accent;
+    color: $noctus-gold;
     text-style: bold;
 }
 
 .hint {
-    color: $panel;
+    color: $noctus-panel;
     text-style: italic;
 }
 
 Button {
-    background: $surface;
-    color: $foreground;
-    border: tall $panel;
+    background: $noctus-surface;
+    color: $noctus-fg;
+    border: tall $noctus-panel;
 }
 
 Button:hover {
-    background: $panel;
+    background: $noctus-panel;
 }
 
 Button:focus, Button.-primary {
-    background: $primary 30%;
-    color: $foreground;
-    border: tall $primary;
+    background: $noctus-amber 30%;
+    color: $noctus-fg-bright;
+    border: tall $noctus-amber;
 }
 
 Input {
-    background: $surface;
-    color: $foreground;
-    border: tall $panel;
+    background: $noctus-surface;
+    color: $noctus-fg;
+    border: tall $noctus-panel;
 }
 
 Input:focus {
-    border: tall $primary;
+    border: tall $noctus-amber;
 }
 
 Tree {
-    background: $background;
-    color: $foreground;
+    background: $noctus-bg;
+    color: $noctus-fg;
 }
 
 Tree > .tree--cursor {
-    background: $primary 30%;
-    color: $foreground;
+    background: $noctus-amber 30%;
+    color: $noctus-fg-bright;
 }
 
 Select {
-    background: $surface;
-    color: $foreground;
+    background: $noctus-surface;
+    color: $noctus-fg;
 }
 
 .cmdinput-paren {
-    background: $surface;
-    color: $secondary;
+    background: $noctus-surface;
+    color: $noctus-acid;
     text-style: bold;
     padding: 1 1;
     width: auto;
@@ -113,7 +118,7 @@ CmdInput Input {
 .field-row Label {
     width: 24;
     padding: 1 1;
-    color: $accent;
+    color: $noctus-gold;
 }
 
 .field-row Input, .field-row CmdInput, .field-row Select {
@@ -122,7 +127,7 @@ CmdInput Input {
 
 #rule-tree {
     height: 1fr;
-    border: tall $panel;
+    border: tall $noctus-panel;
     padding: 1 2;
 }
 
@@ -143,7 +148,7 @@ RuleFormScreen {
     width: 80;
     height: auto;
     max-height: 90%;
-    border: thick $primary;
-    background: $surface;
+    border: thick $noctus-amber;
+    background: $noctus-surface;
     padding: 2 3;
 }
