@@ -1,6 +1,7 @@
 """ScriptPickerScreen — list remote scripts via `sieveman ls`, pick one to edit."""
 
 from textual.app import ComposeResult
+from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
 from textual.screen import Screen
 from textual.widgets import Button, Footer, Header, ListItem, ListView, Static
@@ -14,6 +15,10 @@ class ScriptPickerScreen(Screen[str | None]):
         ("escape", "cancel", "Back"),
         ("enter", "pick", "Open"),
         ("n", "new", "New script"),
+        # vim navigation for the ListView
+        Binding("j", "list_down", "Down", show=False),
+        Binding("k", "list_up", "Up", show=False),
+        Binding("l", "pick", "Open", show=False),
     ]
 
     def compose(self) -> ComposeResult:
@@ -74,3 +79,9 @@ class ScriptPickerScreen(Screen[str | None]):
 
     def action_cancel(self) -> None:
         self.dismiss(None)
+
+    def action_list_down(self) -> None:
+        self.query_one("#script-list", ListView).action_cursor_down()
+
+    def action_list_up(self) -> None:
+        self.query_one("#script-list", ListView).action_cursor_up()

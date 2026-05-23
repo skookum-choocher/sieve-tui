@@ -26,13 +26,19 @@ from typing import Literal
 # Each emitter receives the value and returns the sieve test string.
 PREDICATE_KINDS = [
     ("From (sender address)", "from"),
-    ("From domain", "from_domain"),
+    ("From domain (contains)", "from_domain"),
+    ("From regex", "from_regex"),
     ("To (recipient)", "to"),
     ("Subject contains", "subject_contains"),
     ("Subject is", "subject_is"),
+    ("Subject matches (glob *?)", "subject_matches"),
+    ("Subject regex", "subject_regex"),
     ("List-Id contains", "listid_contains"),
     ("Any header contains", "header_contains"),
+    ("Any header matches (glob)", "header_matches"),
+    ("Any header regex", "header_regex"),
     ("Body contains", "body_contains"),
+    ("Body regex", "body_regex"),
 ]
 PREDICATE_KEYS = {key: label for label, key in PREDICATE_KINDS}
 
@@ -58,20 +64,39 @@ class Condition:
             return f'address :is "From" {v}'
         if self.kind == "from_domain":
             return f'address :contains "From" {v}'
+        if self.kind == "from_regex":
+            return f'address :regex "From" {v}'
         if self.kind == "to":
             return f'address :is "To" {v}'
         if self.kind == "subject_contains":
             return f'header :contains "Subject" {v}'
         if self.kind == "subject_is":
             return f'header :is "Subject" {v}'
+        if self.kind == "subject_matches":
+            return f'header :matches "Subject" {v}'
+        if self.kind == "subject_regex":
+            return f'header :regex "Subject" {v}'
         if self.kind == "listid_contains":
             return f'header :contains "List-Id" {v}'
         if self.kind == "header_contains":
             field = _q(self.extra or "X-Header")
             return f'header :contains {field} {v}'
+        if self.kind == "header_matches":
+            field = _q(self.extra or "X-Header")
+            return f'header :matches {field} {v}'
+        if self.kind == "header_regex":
+            field = _q(self.extra or "X-Header")
+            return f'header :regex {field} {v}'
         if self.kind == "body_contains":
             return f'body :contains {v}'
+        if self.kind == "body_regex":
+            return f'body :regex {v}'
         return f'# unknown condition: {self.kind}'
+
+    def required_extensions(self) -> list[str]:
+        if self.kind.endswith("_regex"):
+            return ["regex"]
+        return []
 
 
 @dataclass
@@ -126,6 +151,8 @@ def emit(rules: list[Rule]) -> str:
     extensions: set[str] = set()
     for r in sorted_rules:
         extensions.update(r.action.required_extensions())
+        for c in r.conditions:
+            extensions.update(c.required_extensions())
 
     lines = []
     if extensions:

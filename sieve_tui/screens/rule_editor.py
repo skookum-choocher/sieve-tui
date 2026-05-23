@@ -8,6 +8,7 @@ or push to server, depending on mode).
 from pathlib import Path
 
 from textual.app import ComposeResult
+from textual.binding import Binding
 from textual.containers import Horizontal, Vertical
 from textual.screen import Screen
 from textual.widgets import Button, Footer, Header, Static
@@ -25,6 +26,12 @@ class RuleEditorScreen(Screen):
         ("d", "delete", "Delete"),
         ("s", "save", "Save"),
         ("escape", "back", "Back"),
+        # vim navigation — drives the Tree cursor directly so j/k beat the
+        # app-level focus-next/prev bindings when the editor is the active screen.
+        Binding("j", "tree_down", "Down", show=False),
+        Binding("k", "tree_up", "Up", show=False),
+        Binding("h", "tree_collapse", "Collapse", show=False),
+        Binding("l", "tree_expand", "Expand/Select", show=False),
     ]
 
     def __init__(self, script_name: str, rules: list[sieve_io.Rule],
@@ -124,3 +131,31 @@ class RuleEditorScreen(Screen):
 
     def action_back(self) -> None:
         self.app.pop_screen()
+
+    # ── Vim navigation actions (drive the tree cursor directly) ─────────────
+
+    def action_tree_down(self) -> None:
+        self.query_one(RuleTreeView).action_cursor_down()
+
+    def action_tree_up(self) -> None:
+        self.query_one(RuleTreeView).action_cursor_up()
+
+    def action_tree_expand(self) -> None:
+        tree = self.query_one(RuleTreeView)
+        node = tree.cursor_node
+        if node is None:
+            return
+        if node.allow_expand and not node.is_expanded:
+            node.expand()
+        else:
+            tree.action_select_cursor()
+
+    def action_tree_collapse(self) -> None:
+        tree = self.query_one(RuleTreeView)
+        node = tree.cursor_node
+        if node is None:
+            return
+        if node.is_expanded:
+            node.collapse()
+        elif node.parent is not None and node.parent is not tree.root:
+            tree.select_node(node.parent)

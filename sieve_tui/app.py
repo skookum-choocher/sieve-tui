@@ -3,6 +3,7 @@
 from pathlib import Path
 
 from textual.app import App
+from textual.binding import Binding
 
 from . import sieveman, sieve_io
 from .config import load
@@ -21,7 +22,14 @@ class SieveTUIApp(App):
         "start": StartScreen,
         "account_setup": AccountSetupScreen,
     }
-    BINDINGS = [("ctrl+c", "quit", "Quit")]
+    # vim-style focus navigation across widgets (j/k as Tab/Shift-Tab aliases).
+    # Hidden from footer to avoid clutter. Input widgets consume character keys
+    # before bindings fire, so typing 'j' in a text field still works as expected.
+    BINDINGS = [
+        ("ctrl+c", "quit", "Quit"),
+        Binding("j", "focus_next", "Down", show=False),
+        Binding("k", "focus_previous", "Up", show=False),
+    ]
 
     def on_mount(self) -> None:
         self.push_screen("start")

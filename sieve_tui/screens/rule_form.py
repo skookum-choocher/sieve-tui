@@ -98,7 +98,9 @@ class RuleFormScreen(ModalScreen[Rule | None]):
 
     def _toggle_extra_visibility(self, cond_kind: str) -> None:
         extra_row = self.query_one("#in-cond-extra", Input).parent
-        extra_row.display = cond_kind == "header_contains"
+        extra_row.display = cond_kind in (
+            "header_contains", "header_matches", "header_regex",
+        )
 
     def _toggle_arg_visibility(self, action_kind: str) -> None:
         arg_row = self.query_one("#in-action-arg", Input).parent
