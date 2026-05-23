@@ -1,0 +1,149 @@
+/* Noctus v2 palette applied to Textual primitives.
+   Base stone grays with amber + acid green accents. */
+
+$background: #1D1D1D;
+$surface: #3E3E3E;
+$panel: #5C5C5C;
+$foreground: #A5A5A5;
+$text: #A5A5A5;
+$primary: #E0A810;      /* hot amber — accent / focus */
+$secondary: #7A8C15;    /* acid green — active mode */
+$accent: #D4A54E;       /* burnished gold — titles */
+$success: #3A8A3A;      /* forest green */
+$warning: #E0A810;      /* hot amber */
+$error: #C75A43;        /* terra cotta */
+
+Screen {
+    background: $background;
+    color: $foreground;
+}
+
+Header {
+    background: $surface;
+    color: $accent;
+}
+
+Footer {
+    background: $surface;
+    color: $foreground;
+}
+
+.title {
+    color: $accent;
+    text-style: bold;
+}
+
+.hint {
+    color: $panel;
+    text-style: italic;
+}
+
+Button {
+    background: $surface;
+    color: $foreground;
+    border: tall $panel;
+}
+
+Button:hover {
+    background: $panel;
+}
+
+Button:focus, Button.-primary {
+    background: $primary 30%;
+    color: $foreground;
+    border: tall $primary;
+}
+
+Input {
+    background: $surface;
+    color: $foreground;
+    border: tall $panel;
+}
+
+Input:focus {
+    border: tall $primary;
+}
+
+Tree {
+    background: $background;
+    color: $foreground;
+}
+
+Tree > .tree--cursor {
+    background: $primary 30%;
+    color: $foreground;
+}
+
+Select {
+    background: $surface;
+    color: $foreground;
+}
+
+.cmdinput-paren {
+    background: $surface;
+    color: $secondary;
+    text-style: bold;
+    padding: 1 1;
+    width: auto;
+}
+
+CmdInput {
+    height: 3;
+}
+
+CmdInput Input {
+    width: 1fr;
+}
+
+#start-buttons Button {
+    width: 30;
+    margin: 1 2;
+}
+
+#start-buttons {
+    align: center middle;
+    height: auto;
+}
+
+.field-row {
+    height: auto;
+    margin: 0 0 1 0;
+}
+
+.field-row Label {
+    width: 24;
+    padding: 1 1;
+    color: $accent;
+}
+
+.field-row Input, .field-row CmdInput, .field-row Select {
+    width: 1fr;
+}
+
+#rule-tree {
+    height: 1fr;
+    border: tall $panel;
+    padding: 1 2;
+}
+
+#rule-actions {
+    height: auto;
+    align: center middle;
+}
+
+#rule-actions Button {
+    margin: 0 1;
+}
+
+RuleFormScreen {
+    align: center middle;
+}
+
+#rule-form {
+    width: 80;
+    height: auto;
+    max-height: 90%;
+    border: thick $primary;
+    background: $surface;
+    padding: 2 3;
+}

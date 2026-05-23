@@ -1,0 +1,20 @@
+[project]
+name = "sieve-tui"
+version = "0.1.0"
+description = "TUI for building sieve mail filter scripts without remembering syntax"
+requires-python = ">=3.11"
+dependencies = [
+    "textual>=8.0",
+    "sievelib>=1.5",
+]
+
+[project.scripts]
+sieve-tui = "sieve_tui.__main__:main"
+
+[build-system]
+requires = ["setuptools>=61"]
+build-backend = "setuptools.build_meta"
+
+[tool.setuptools.packages.find]
+where = ["."]
+include = ["sieve_tui*"]
